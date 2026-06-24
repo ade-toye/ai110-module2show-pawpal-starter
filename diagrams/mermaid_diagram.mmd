@@ -1,0 +1,68 @@
+classDiagram
+    class Owner {
+        +String name
+        +List~Pet~ pets
+        +add_pet(pet: Pet)
+        +remove_pet(pet_name: String)
+    }
+
+    class Pet {
+        +String name
+        +String species
+        +String breed
+        +int age
+        +List~Task~ tasks
+        +add_task(task: Task)
+        +remove_task(task_name: String)
+        +get_tasks_by_priority() List~Task~
+    }
+
+    class Task {
+        +String name
+        +String category
+        +int duration_minutes
+        +String priority
+        +bool recurring
+        +String frequency
+    }
+
+    class Constraint {
+        +String start_time
+        +String end_time
+        +int total_minutes_available
+        +List~String~ blocked_times
+        +is_time_available(start: String, duration: int) bool
+    }
+
+    class DailyPlanner {
+        +String date
+        +Pet pet
+        +Constraint constraints
+        +List~ScheduledTask~ scheduled_tasks
+        +generate_plan() List~ScheduledTask~
+        +sort_by_priority(tasks: List~Task~) List~Task~
+        +filter_by_time(tasks: List~Task~) List~Task~
+        +display_plan() String
+    }
+
+    class ScheduledTask {
+        +Task task
+        +String start_time
+        +String end_time
+        +get_summary() String
+    }
+
+    class AIAssistant {
+        +String model
+        +explain_plan(plan: List~ScheduledTask~) String
+        +suggest_tasks(pet: Pet) List~Task~
+        +process_input(owner: Owner, constraints: Constraint) String
+    }
+
+    Owner "1" --> "1..*" Pet : owns
+    Pet "1" --> "0..*" Task : has
+    DailyPlanner "1" --> "1" Pet : plans for
+    DailyPlanner "1" --> "1" Constraint : respects
+    DailyPlanner "1" --> "0..*" ScheduledTask : produces
+    ScheduledTask "1" --> "1" Task : wraps
+    AIAssistant "1" --> "1" DailyPlanner : drives

@@ -5,7 +5,12 @@
 **a. Initial design**
 
 - Briefly describe your initial UML design.
+We will definitely need a Pet class, Constraint, Daily Planner and AI Assistant
 - What classes did you include, and what responsibilities did you assign to each?
+The Pet class would be there in case the user has multiple pets, 
+The constraint class is there to enter our ysers availability
+The daily planner class is the class that captures the finalized schedule for the day
+The AI Assistan class is the one that acts as the "brain" of your Streamlit app, processing input data to produce the final plan.
 
 **b. Design changes**
 

@@ -72,14 +72,13 @@ Sample test output:
 
 ## 📐 Smarter Scheduling
 
-> Fill in once you've implemented scheduling logic.
-
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Sort by time | `DailyPlanner.sort_by_time()` | Sorts tasks by `pinned_start_time` ascending; unpinned tasks fall to the end via a `float("inf")` sentinel key |
+| Sort by priority | `DailyPlanner.sort_by_priority()` | Orders tasks HIGH → MEDIUM → LOW so the most important care happens first when filling free slots |
+| Filter by pet or status | `DailyPlanner.filter_tasks()` | Returns tasks matching an optional pet name, completion status, or both combined (AND logic) |
+| Conflict detection | `DailyPlanner._detect_conflicts()` | Groups scheduled tasks by pet and checks adjacent pairs for time overlap in O(n); issues a `UserWarning` instead of crashing so the rest of the plan still displays |
+| Recurring task scheduling | `Task.next_occurrence()` + `DailyPlanner.complete_task()` | When a recurring task is marked complete, `complete_task()` calls `next_occurrence()` to clone the task with `completed=False` and a new `due_date` — +1 day for daily, +7 days for weekly — and adds it back to the pet's task list automatically |
 
 ## 📸 Demo Walkthrough
 
@@ -92,3 +91,10 @@ Describe your app in numbered steps so a reader can follow along without watchin
 5. <!-- Add more steps as needed -->
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
+
+## Sample Output
+Daily plan for Toye — 2026-06-24:
+  17:00 — Walk Bugsy (30 min) [high]
+  19:00 — Feed Bugsy (15 min) [high]
+  21:00 — Bathe Pero (20 min) [high]
+

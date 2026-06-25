@@ -56,19 +56,46 @@ Paste a sample of your app's CLI or Streamlit output here so a reader can see wh
 
 ## 🧪 Testing PawPal+
 
+### How to run
+
 ```bash
-# Run the full test suite:
-pytest
-
-# Run with coverage:
-pytest --cov
+python3 -m pytest tests/test_pawpal.py -v
 ```
 
-Sample test output:
+### What the tests cover
+
+| Test | Area | Description |
+|------|------|-------------|
+| `test_mark_complete_changes_task_status` | Task state | Marking a task complete flips `completed` to `True` |
+| `test_add_task_increases_pet_task_count` | Pet model | `add_task()` appends to the pet's task list |
+| `test_generate_plan_returns_tasks_in_chronological_order` | Sorting | `generate_plan()` returns scheduled tasks sorted by ascending start time, regardless of input order or priority |
+| `test_complete_daily_task_queues_next_occurrence` | Recurrence | Completing a `daily` recurring task on a given date automatically adds a new task with `due_date` set to the following day |
+| `test_detect_conflicts_warns_on_same_start_time` | Conflict detection | Two tasks pinned to the same start time for the same pet trigger a `UserWarning` containing `"conflict"` |
+
+### Successful test run output
 
 ```
-# Paste your pytest output here
+============================= test session starts ==============================
+platform darwin -- Python 3.12.5, pytest-9.1.1, pluggy-1.6.0 -- /Library/Frameworks/Python.framework/Versions/3.12/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/toye/Desktop/Codepath/ai110-module2show-pawpal-starter
+plugins: anyio-4.14.0
+collecting ... collected 5 items
+
+tests/test_pawpal.py::test_mark_complete_changes_task_status PASSED      [ 20%]
+tests/test_pawpal.py::test_add_task_increases_pet_task_count PASSED      [ 40%]
+tests/test_pawpal.py::test_generate_plan_returns_tasks_in_chronological_order PASSED [ 60%]
+tests/test_pawpal.py::test_complete_daily_task_queues_next_occurrence PASSED [ 80%]
+tests/test_pawpal.py::test_detect_conflicts_warns_on_same_start_time PASSED [100%]
+
+============================== 5 passed in 0.51s ==============================
 ```
+
+### Confidence Level
+
+**3 / 5 stars**
+
+The five tests cover the three most critical behaviors — chronological ordering, daily recurrence, and conflict detection — and all pass cleanly. Confidence is kept at 3 because several edge cases are untested: a pinned task scheduled outside the constraint window, a recurring task whose `frequency` is `None`, tasks that overflow the available time window, and anything touching the AI assistant layer (`explain_plan`, `suggest_tasks`). The core scheduling logic is solid; the boundary conditions and AI integration paths still need coverage before this could be rated higher.
 
 ## 📐 Smarter Scheduling
 
